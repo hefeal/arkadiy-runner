@@ -1230,7 +1230,10 @@ function createVerticalTapArea(scene) {
 function setGameOrientation(scene, vertical) {
     scene.verticalOrientation = vertical;
     const targetHeight = vertical ? VERTICAL_GAME_HEIGHT : GAME_HEIGHT;
-    scene.scale.resize(GAME_WIDTH, targetHeight);
+    // setGameSize updates both the drawing buffer and the FIT aspect ratio.
+    // resize() alone left the canvas styled as 16:9 and vertically squashed it.
+    scene.scale.setGameSize(GAME_WIDTH, targetHeight);
+    scene.scale.refresh();
     scene.cameras.main.setSize(GAME_WIDTH, targetHeight);
     scene.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
     scene.verticalTapArea?.setVisible(vertical);
